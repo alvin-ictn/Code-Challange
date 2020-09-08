@@ -1,6 +1,6 @@
 const input = document.getElementById("input"), // ambil element input disimpan dalam variable input
       buttonadd = document.getElementById("add"), // ambil element add disimpan dalam variable buttonadd
-      lists = document.getElementById("lists"), // ambil element lists disimpan dalam variable lists
+      lists = document.getElementById("lists"); // ambil element lists disimpan dalam variable lists
 
 let todo = []; // kita simpan data yang kita input di array todo 
 
