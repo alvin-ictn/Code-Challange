@@ -1,0 +1,121 @@
+body{
+  background: #C4C4C4;
+}
+
+.container{
+  padding:20px;
+  margin:0 auto;
+  width: 292px;
+  height: 587px;
+  display:flex;
+  flex-direction: column;
+  background: #FFFFFF;
+}
+
+input[type="text"]{
+  padding:0 10px;
+  flex-grow:2;
+  margin-right:20px;
+  height:39px;
+  background: #EFEFEF;
+  border: 1px solid #818181;
+  box-sizing: border-box;
+}
+
+button{
+  flex-grow:1;
+  background: #FF6F6F;
+  border:0;
+  height:39px;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  color: #FFFFFF;
+  cursor:pointer;
+}
+
+
+::-webkit-input-placeholder, 
+:-ms-input-placeholder, 
+::placeholder { /* Edge */
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.toDo-input {
+  display:flex;
+  flex-direction: row;
+}
+
+ul {
+  list-style-type:none;
+  display:block;
+  flex-direction: column;
+  padding:0;
+  transition:all 0.5 ease;
+}
+
+li {
+  display:block;
+  flex-direction: row;
+  flex:1;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 16px;
+  border-color:black;
+  border-style: solid;
+  border-width:1px 0 1px 0;
+  padding:20px 0;
+  transition:all 0.5 ease;
+  animation: slide-up 0.4s ease;
+}
+
+li:nth-child(even){
+  border-width:0;
+}
+
+li:last-child{
+  border-bottom:1px solid black;
+}
+
+li input.checkboxClass {
+  cursor: copy;
+}
+
+li a.action {
+  float:right;
+  cursor: pointer;
+}
+
+.task-done {
+  text-decoration: line-through;
+}
+
+@keyframes slide-up {
+  0% {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+  100% {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+@keyframes delete {
+  0% {
+      opacity: 1;
+      transform: rotateX(0deg);
+  }
+  100% {
+      opacity: 0;
+      transform: rotateX(90deg);
+  }
+}
