@@ -21,13 +21,24 @@ if(todo.length) show();
 //     show();
 // }
 
+// function show(){
+//     let render = "";
+//      for(item of todo) {
+//          item.date = new Date(item.date);
+//          render += `<li>${item.text} | ${item.date}${item.completed}</li>`
+//      }
+//      list.html(render)
+//  }
+
 function show(){
    let render = "";
-    for(item of todo) {
-        item.date = new Date(item.date);
-        render += `<li>${item.text} | ${item.date}${item.completed}</li>`
-    }
-    list.html(render)
+    list.html(() => {
+        for(item of todo) {
+            item.date = new Date(item.date);
+            render += `<li>${item.text} | ${item.date}${item.completed}</li>`
+        }
+        return render
+    })
 }
 // function show(){
 //     list.innerHTML = "";
