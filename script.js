@@ -1,160 +1,94 @@
-// deklarasi variable DOM
-const input = document.getElementById('input'), // memasukan Element DOM kedalam variable input
-      buttonadd = document.getElementById('add'), // memasukan Element DOM kedalam variable buttonadd
-      list = document.getElementById('lists'), // memasukan Element DOM kedalam variable list
-// akhir dari deklarasi variable DOM
+const input = document.getElementById('input'),
+      buttonadd = document.getElementById('add'),
+      list = document.getElementById('lists');
 
-      data = storage('todo'); // ngambil data dari storage
-
-class Todos {
-    constructor({text,date,completed,id}){
-        this.todo = storage('todo') || [];
-        this.text = text;
-        this.date = new Date();
-        this.completed = false;
-        this.id = id || 0;
+class Todo {
+    constructor(){
+        this.data =  this.storage('todo') || [];
+        this.show();
     }
+    
+    show(){
+        list.innerHTML = "";
+        for (let i = 0; i < this.data.length; i++) {
+            // this.data[i].completed = true;
+            const {text, date, completed} = this.data[i];
 
-    static show(){
-        console.log
-        list.innerHTML = ""; // set innerHTML DOM list menjadi kosong
-
-        // looping untuk nampilin list
-        // let i = 0 deklarasi start number
-        for (let i = 0; i < todo.length; i++) {
-            todo[0].date = new Date(todo[0].date); // convert date string ke format date
-            // menambahkan semua element dalam backthick (template literal) ke dalam innerHTML sebelumnya
-            list.innerHTML +=
-            `<li>
-                ${todo[i].completed ? '<s>' : ''}${todo[i].text} | ${new Date(todo[0].date)}${todo[i].completed ? '</s>' : ''} 
-                <button onclick="Todos.purge(${i})">🗑️</button>
-                <button onclick="Todos.edit(${i}, event)">✏️</button>
-                <button onclick="completeTask(${i}, event)">✔️</button>
+            // todo
+            list.innerHTML += `
+            <li>${i + 1}. ${text} | ${date} | ${completed}
+                <button id="removeItem" noIndex="${i}" onclick="this.remove(${i})">🗑️</button>
+                <button id="editItem" noIndex="${i}" onclick="edit(${i}, event)">✏️</button>
+                <button id="completeItem" noIndex="${i}" onclick="completeTask(${i}, event)">${completed ? "❌" : "✔️"}</button>
             </li>`
         }
+        let remove = document.querySelectorAll('#removeItem');
+        let complete = document.querySelectorAll('#completeItem');
+        let editItem = document.querySelectorAll('#editItem');
+
+        remove.forEach(item => {
+            // parentElement.removeChild(item.parentNode)
+            item.onclick = () => {
+                console.log(item.getAttribute("class"));
+                console.log(item.getAttribute("aqua"));
+                this.data.splice(item.getAttribute("noIndex"),1);
+                this.storage('todo',this.data,true);
+                this.show()
+            }
+        })
+
+        complete.forEach(item => {
+            item.onclick = () => {
+                let complete = this.data[item.getAttribute("noIndex")].completed;
+                this.data[item.getAttribute("noIndex")].completed = complete ? false : true
+                this.storage('todo', this.data, true); // menyimpan data pada local storage dengan fungsi storage
+                this.show(); // menampilkan ulang data
+            }
+        })
+
+
+        editItem.forEach(item => {
+            item.onclick = () => {
+                let elem = item.parentNode; // event target membaca element apa yang di click, event target parentNode membaca parent dari element yang di klik
+                elem.innerHTML = `<input type="text" noIndexDone="${item.getAttribute("noIndex")}">`
+                elem.onkeypress = () => {
+                    this.done(event)
+                }
+            }
+        })
     }
 
-    static edit(index, event){
-        let elem = event.target.parentNode; // event target membaca element apa yang di click, event target parentNode membaca parent dari element yang di klik
-        elem.innerHTML = `<input type="text" onkeypress="Todos.done(${index}, event)">` //mengubah list menjadi sebuah input dengan menambahkan fungsi done dan aktif ketika papan ketik di tekan
-    }
-
-    static done(index, event){
-        if (event.which == 13) { // event which 13 adalah tombol enter
-            todo[index].text = event.target.value; // ini untuk mengisi key text pada  objek todo di index yang dituju
-            storage('todo', todo, true); // menyimpan data pada local storage dengan fungsi storage 
-            Todos.show(); // menampilkan ulang data
+    done(datainput){
+        if (datainput.which == 13) { // event which 13 adalah tombol enter
+            this.data[datainput.target.getAttribute('noindexdone')].text = datainput.target.value; // ini untuk mengisi key text pada  objek todo di index yang dituju
+            this.storage('todo', this.data, true); // menyimpan data pada local storage dengan fungsi storage 
+            this.show(); // menampilkan ulang data
         }
     }
 
-    static purge(index){
-        console.log(index)
-        console.log(event)
-        console.log(event.target)
-        console.log(event.target.value)
-        todo.splice(index, 1);
-        // todo[index].text = event.target.value; // ini untuk mengisi key text pada  objek todo di index yang dituju
-        storage('todo', todo, true); // menyimpan data pada local storage dengan fungsi storage 
-        Todos.show(); // menampilkan ulang data
-        console.log(todo)
+    setTodo(value){
+        console.log(this.data)
+        this.data.push(
+            {
+                text: value,
+                date: new Date(),
+                completed: false,
+            }
+        )
+        this.storage('todo',this.data,true);
+        this.show()
     }
 
-    set add(value){
-        todo.push({
-            text:value,
-            date: new Date(),
-            completed: false
-        })
-        storage('todo', todo, true);
-        Todos.show();
-    }
+    storage(name, data = null, set = false){
+        if(set){ // jika set kondisi true
+            localStorage.setItem(name, JSON.stringify(data)); // melakukan penetapan pada localstorage browser dengan variable/property yang ditunjukan oleh variable "name" dan data yang diterima di konversi kedalam bentuk JSON
+            return true; 
+        }else{ // kondisi false
+            return JSON.parse(localStorage.getItem(name)); // melakukan pengambilan data pada local storage berdasarkan variable yang ditunjukan oleh variable "name" yang kemduian di konversi kedalam bentuk JSON lagi (Objek)
+        }
+      }
+};
 
-   
+let todo = new Todo;
 
-}
-
-let clasdo = new Todos("");
-let todo = data ? data : []; // deklarasi variable todo, masukan data jika ada data jika data array kosong
-
-buttonadd.addEventListener('click', ()=>{
-    clasdo.add = input.value;
-});
-
-// // ini fungsi untuk nambahin data
-// function add(){
-//   let val = input.value; //ngambil value dari DOM input
-//   todo.push({
-//       text: val, // data inputan
-//       date: new Date(), // data tanggal waktu input
-//       completed: false, // data kondisi komplit
-//   }) // memasukan data kedalam array dari belakang
-//   storage('todo', todo, true); //nambahin data ke storage
-//   show();
-// }
-// // akhir fungsi data
-
-// ini fungsi untuk ngecek apakah todo punya isi gak
-if(todo.length){
-    Todos.show();
-}
-
-// // ini fungsi untuk menampilkan kedalam HTML
-// function show(){
-//   list.innerHTML = ""; // set innerHTML DOM list menjadi kosong
-
-//   // looping untuk nampilin list
-//   // let i = 0 deklarasi start number
-//   for (let i = 0; i < todo.length; i++) {
-//       todo[0].date = new Date(todo[0].date); // convert date string ke format date
-//       // menambahkan semua element dalam backthick (template literal) ke dalam innerHTML sebelumnya
-//       list.innerHTML +=
-//       `<li>
-//           ${todo[i].completed ? '<s>' : ''}${todo[i].text} | ${todo[i].date}${todo[i].completed ? '</s>' : ''} 
-//           <button onclick="remove(${i})">🗑️</button>
-//           <button onclick="edit(${i}, event)">✏️</button>
-//           <button onclick="completeTask(${i}, event)">✔️</button>
-//       </li>`
-//   }
-// }
-// akhir dari fungsi menampilkan kedalam HTML
-
-// fungsi edit untuk mengubah list yang di edit menjadi input text
-function edit(index, event){
-    let elem = event.target.parentNode; // event target membaca element apa yang di click, event target parentNode membaca parent dari element yang di klik
-    elem.innerHTML = `<input type="text" onkeypress="done(${index}, event)">` //mengubah list menjadi sebuah input dengan menambahkan fungsi done dan aktif ketika papan ketik di tekan
-}
-//akhir dari fungsi edit
-
-// fungsi done untuk melakukan perubahan atau penetapan data pada storage dan menampilkan ulang data tersebut
-function done(index, event){
-    if (event.which == 13) { // event which 13 adalah tombol enter
-        todo[index].text = event.target.value; // ini untuk mengisi key text pada  objek todo di index yang dituju
-        storage('todo', todo, true); // menyimpan data pada local storage dengan fungsi storage 
-        show(); // menampilkan ulang data
-    }
-}
-//akhir dari fungsi done
-
-// fungsi remove untuk menghapus data berdasarkan index dari data tersebut
-// function remove(index){
-//     console.log('remove index', index); // menampilkan pesan pada console log "remove index X"
-//     todo.splice(index, 1); // metode pada array untuk membuang array pada index tertentu sebanyak 1 kali
-//     storage('todo', todo, true); // menyimpan data pada local storage dengan fungsi storage
-//     show(); // menampilkan ulang data
-// }
-// akhir dari fungsi done
-
-function completeTask(index){
-  todo[index].completed = true; // mengubah kondisi completed pada array objek todo menjadi true agar tercoret pada tampilan
-  storage('todo', todo, true); // menyimpan data pada local storage dengan fungsi storage
-  show(); // menampilkan ulang data
-}
-
-function storage(name, data = null, set = false){
-  if(set){ // jika set kondisi true
-      localStorage.setItem(name, JSON.stringify(data)); // melakukan penetapan pada localstorage browser dengan variable/property yang ditunjukan oleh variable "name" dan data yang diterima di konversi kedalam bentuk JSON
-      return true; 
-  }else{ // kondisi false
-      return JSON.parse(localStorage.getItem(name)); // melakukan pengambilan data pada local storage berdasarkan variable yang ditunjukan oleh variable "name" yang kemduian di konversi kedalam bentuk JSON lagi (Objek)
-  }
-}
+buttonadd.addEventListener('click', () => todo.setTodo(input.value));
