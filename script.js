@@ -17,50 +17,34 @@ class Todo {
             // todo
             list.innerHTML += `
             <li>${i + 1}. ${text} | ${date} | ${completed}
-                <button id="removeItem" noIndex="${i}" onclick="this.remove(${i})">🗑️</button>
-                <button id="editItem" noIndex="${i}" onclick="edit(${i}, event)">✏️</button>
-                <button id="completeItem" noIndex="${i}" onclick="completeTask(${i}, event)">${completed ? "❌" : "✔️"}</button>
+                <button id="removeItem" noIndex="${i}" onclick="todo.remove(${i})">🗑️</button>
+                <button id="editItem" noIndex="${i}" onclick="todo.edit(${i}, event)">✏️</button>
+                <button id="completeItem" noIndex="${i}" onclick="todo.completeTask(${i}, event)">${completed ? "❌" : "✔️"}</button>
             </li>`
         }
-        let remove = document.querySelectorAll('#removeItem');
-        let complete = document.querySelectorAll('#completeItem');
-        let editItem = document.querySelectorAll('#editItem');
-
-        remove.forEach(item => {
-            // parentElement.removeChild(item.parentNode)
-            item.onclick = () => {
-                console.log(item.getAttribute("class"));
-                console.log(item.getAttribute("aqua"));
-                this.data.splice(item.getAttribute("noIndex"),1);
-                this.storage('todo',this.data,true);
-                this.show()
-            }
-        })
-
-        complete.forEach(item => {
-            item.onclick = () => {
-                let complete = this.data[item.getAttribute("noIndex")].completed;
-                this.data[item.getAttribute("noIndex")].completed = complete ? false : true
-                this.storage('todo', this.data, true); // menyimpan data pada local storage dengan fungsi storage
-                this.show(); // menampilkan ulang data
-            }
-        })
-
-
-        editItem.forEach(item => {
-            item.onclick = () => {
-                let elem = item.parentNode; // event target membaca element apa yang di click, event target parentNode membaca parent dari element yang di klik
-                elem.innerHTML = `<input type="text" noIndexDone="${item.getAttribute("noIndex")}">`
-                elem.onkeypress = () => {
-                    this.done(event)
-                }
-            }
-        })
     }
 
-    done(datainput){
-        if (datainput.which == 13) { // event which 13 adalah tombol enter
-            this.data[datainput.target.getAttribute('noindexdone')].text = datainput.target.value; // ini untuk mengisi key text pada  objek todo di index yang dituju
+    remove(index){
+        this.data.splice(index,1);
+        this.storage('todo',this.data,true);
+        this.show()
+    }
+
+    completeTask(index,event){
+        let complete = this.data[index].completed;
+        this.data[index].completed = complete ? false : true
+        this.storage('todo', this.data, true); // menyimpan data pada local storage dengan fungsi storage
+        this.show(); // menampilkan ulang data
+    }
+
+    edit(index,event){
+        let elem = event.target.parentNode; // event target membaca element apa yang di click, event target parentNode membaca parent dari element yang di klik
+        elem.innerHTML = `<input type="text" onkeypress="todo.done(${index}, event)">` //mengubah list menjadi sebuah input dengan menambahkan fungsi done dan aktif ketika papan ketik di tekan
+    }
+
+    done(index,event){
+        if (event.which == 13) { // event which 13 adalah tombol enter
+            this.data[index].text = event.target.value; // ini untuk mengisi key text pada  objek todo di index yang dituju
             this.storage('todo', this.data, true); // menyimpan data pada local storage dengan fungsi storage 
             this.show(); // menampilkan ulang data
         }
