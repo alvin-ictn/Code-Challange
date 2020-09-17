@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/Code-Challange/static/css/main.d9847bb1.chunk.css",
+    "main.js": "/Code-Challange/static/js/main.543a6924.chunk.js",
+    "main.js.map": "/Code-Challange/static/js/main.543a6924.chunk.js.map",
+    "runtime-main.js": "/Code-Challange/static/js/runtime-main.fcdb61d7.js",
+    "runtime-main.js.map": "/Code-Challange/static/js/runtime-main.fcdb61d7.js.map",
+    "static/js/2.8eb0dc2f.chunk.js": "/Code-Challange/static/js/2.8eb0dc2f.chunk.js",
+    "static/js/2.8eb0dc2f.chunk.js.map": "/Code-Challange/static/js/2.8eb0dc2f.chunk.js.map",
+    "index.html": "/Code-Challange/index.html",
+    "precache-manifest.b6e022f22d8054569a4cf716c83f4a9e.js": "/Code-Challange/precache-manifest.b6e022f22d8054569a4cf716c83f4a9e.js",
+    "service-worker.js": "/Code-Challange/service-worker.js",
+    "static/css/main.d9847bb1.chunk.css.map": "/Code-Challange/static/css/main.d9847bb1.chunk.css.map",
+    "static/js/2.8eb0dc2f.chunk.js.LICENSE.txt": "/Code-Challange/static/js/2.8eb0dc2f.chunk.js.LICENSE.txt",
+    "static/media/logo.svg": "/Code-Challange/static/media/logo.5d5d9eef.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.fcdb61d7.js",
+    "static/js/2.8eb0dc2f.chunk.js",
+    "static/css/main.d9847bb1.chunk.css",
+    "static/js/main.543a6924.chunk.js"
+  ]
+}
